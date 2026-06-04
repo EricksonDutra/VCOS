@@ -256,12 +256,17 @@ class VcosController extends ChangeNotifier {
     _isSyncing = true;
     notifyListeners();
 
+    final hasPendingSettings = await _repository.hasPendingSync(
+      entityType: 'settings',
+      entityId: '1',
+    );
     final result = await _syncGateway.pushChanges(
       sales:
           _sales.where((sale) => sale.syncStatus != SyncStatus.synced).toList(),
       expenses: _expenses
           .where((expense) => expense.syncStatus != SyncStatus.synced)
           .toList(),
+      settings: hasPendingSettings ? _settings : null,
     );
 
     for (final entry in result.syncedSales.entries) {
@@ -269,6 +274,19 @@ class VcosController extends ChangeNotifier {
         entityType: 'sale',
         entityId: entry.key,
         remoteId: entry.value,
+      );
+    }
+    for (final entry in result.syncedExpenses.entries) {
+      await _repository.completeSync(
+        entityType: 'expense',
+        entityId: entry.key,
+        remoteId: entry.value,
+      );
+    }
+    if (result.settingsSynced) {
+      await _repository.completeSync(
+        entityType: 'settings',
+        entityId: '1',
       );
     }
     await _refreshRecords();

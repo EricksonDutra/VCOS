@@ -7,6 +7,10 @@ abstract class VcosRepository {
   Future<List<Expense>> loadExpenses();
   Future<AppSettings> loadSettings();
   Future<int> loadPendingSyncCount();
+  Future<bool> hasPendingSync({
+    required String entityType,
+    String? entityId,
+  });
   Future<List<String>> loadSuggestions(String field);
 
   Future<void> saveSale(Sale sale);
