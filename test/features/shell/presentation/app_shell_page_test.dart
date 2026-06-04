@@ -86,8 +86,10 @@ void main() {
       find.widgetWithText(TextFormField, 'Produto vendido'),
       'Avental',
     );
-    await tester.enterText(find.widgetWithText(TextFormField, 'Cliente'), 'Maria');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Valor'), '85,00');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Cliente'), 'Maria');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Valor'), '85,00');
     await tester.ensureVisible(find.text('Salvar venda'));
     await tester.tap(find.text('Salvar venda'));
     await tester.pumpAndSettle();
@@ -127,8 +129,10 @@ void main() {
       find.widgetWithText(TextFormField, 'Material ou despesa'),
       'Tecido',
     );
-    await tester.enterText(find.widgetWithText(TextFormField, 'Categoria'), 'Materiais');
-    await tester.enterText(find.widgetWithText(TextFormField, 'Valor'), '30,00');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Categoria'), 'Materiais');
+    await tester.enterText(
+        find.widgetWithText(TextFormField, 'Valor'), '30,00');
     await tester.ensureVisible(find.text('Salvar gasto'));
     await tester.tap(find.text('Salvar gasto'));
     await tester.pumpAndSettle();

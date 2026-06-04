@@ -14,8 +14,9 @@ class ReportsPage extends StatelessWidget {
     return Consumer<VcosController>(
       builder: (context, controller, _) {
         final summary = controller.summary;
-        final expenseShare =
-            summary.salesTotal == 0 ? 0.0 : (summary.expensesTotal / summary.salesTotal).clamp(0.0, 1.0);
+        final expenseShare = summary.salesTotal == 0
+            ? 0.0
+            : (summary.expensesTotal / summary.salesTotal).clamp(0.0, 1.0);
 
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 110),
@@ -27,7 +28,8 @@ class ReportsPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: AppSpacing.lg),
-              _ReportRow(label: 'Entradas', value: formatMoney(summary.salesTotal)),
+              _ReportRow(
+                  label: 'Entradas', value: formatMoney(summary.salesTotal)),
               _ReportRow(
                 label: 'Sa\u00eddas',
                 value: formatMoney(summary.expensesTotal),
@@ -87,7 +89,8 @@ class _ReportRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+              child:
+                  Text(label, style: Theme.of(context).textTheme.titleMedium),
             ),
             Text(value, style: Theme.of(context).textTheme.headlineMedium),
           ],

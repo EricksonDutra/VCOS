@@ -18,7 +18,8 @@ class SalesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<VcosController>(
       builder: (context, controller, _) {
-        final sales = controller.sales.where((sale) => !sale.isDeleted).toList();
+        final sales =
+            controller.sales.where((sale) => !sale.isDeleted).toList();
 
         return _RecordListPage<Sale>(
           title: 'Vendas',

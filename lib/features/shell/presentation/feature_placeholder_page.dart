@@ -200,8 +200,8 @@ class _Swatch extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: color,
-      shape: BoxShape.circle,
-      border: Border.all(
+        shape: BoxShape.circle,
+        border: Border.all(
           color: AppColors.threadBrown.withValues(alpha: 0.45),
           width: 2,
         ),

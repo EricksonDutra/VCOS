@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <img alt="CI/CD" src="https://github.com/EricksonDutra/VCOS/actions/workflows/ci-cd.yml/badge.svg" />
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter&logoColor=white" />
   <img alt="Dart" src="https://img.shields.io/badge/Dart-3.x-0175C2?style=flat-square&logo=dart&logoColor=white" />
   <img alt="Status" src="https://img.shields.io/badge/status-em%20desenvolvimento-F2B705?style=flat-square" />
@@ -117,6 +118,20 @@ Mantenha commits pequenos, objetivos e relacionados a uma unica mudanca. Antes d
 flutter analyze
 flutter test
 ```
+
+## CI/CD
+
+O projeto possui um workflow em `.github/workflows/ci-cd.yml` para garantir qualidade e padronizacao antes de mergear ou publicar uma versao.
+
+- Valida nomes de branches.
+- Valida mensagens de commit.
+- Executa `dart format --set-exit-if-changed lib test integration_test`.
+- Executa `flutter analyze`.
+- Executa `flutter test --coverage`.
+- Publica o arquivo `coverage/lcov.info` como artefato.
+- Gera APK release automaticamente quando uma tag `vX.Y.Z` e publicada.
+
+As regras completas estao em `CONTRIBUTING.md`.
 
 ## Padrao de Branches e Commits
 

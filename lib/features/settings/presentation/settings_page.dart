@@ -119,7 +119,9 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () async {
               await controller.updateSettings(
                 AppSettings(
-                  studioName: _studioController.text.trim().isEmpty ? 'VCOS Retalhos' : _studioController.text.trim(),
+                  studioName: _studioController.text.trim().isEmpty
+                      ? 'VCOS Retalhos'
+                      : _studioController.text.trim(),
                   ownerName: _ownerController.text.trim(),
                   phone: _phoneController.text.trim(),
                   autoSyncEnabled: _autoSyncEnabled,

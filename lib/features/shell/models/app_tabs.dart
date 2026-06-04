@@ -12,7 +12,8 @@ const appTabs = [
     label: 'In\u00edcio',
     icon: Icons.home_rounded,
     title: 'In\u00edcio',
-    description: 'Acompanhe os principais n\u00fameros do ateli\u00ea em um s\u00f3 lugar.',
+    description:
+        'Acompanhe os principais n\u00fameros do ateli\u00ea em um s\u00f3 lugar.',
     actionLabel: 'Ver resumo',
     page: HomePage(),
   ),
@@ -36,7 +37,8 @@ const appTabs = [
     label: 'Rel.',
     icon: Icons.bar_chart_rounded,
     title: 'Relat\u00f3rios',
-    description: 'Visualize resultados, gr\u00e1ficos e relat\u00f3rios para compartilhar.',
+    description:
+        'Visualize resultados, gr\u00e1ficos e relat\u00f3rios para compartilhar.',
     actionLabel: 'Abrir relat\u00f3rios',
     page: ReportsPage(),
   ),
@@ -44,7 +46,8 @@ const appTabs = [
     label: 'Config',
     icon: Icons.settings_rounded,
     title: 'Configura\u00e7\u00f5es',
-    description: 'Ajuste prefer\u00eancias, dados do ateli\u00ea e op\u00e7\u00f5es de acessibilidade.',
+    description:
+        'Ajuste prefer\u00eancias, dados do ateli\u00ea e op\u00e7\u00f5es de acessibilidade.',
     actionLabel: 'Editar ajustes',
     page: SettingsPage(),
   ),

@@ -282,13 +282,15 @@ class _PhotoGrid extends StatelessWidget {
   }
 }
 
-Future<void> _confirmDeleteExpense(BuildContext context, Expense expense) async {
+Future<void> _confirmDeleteExpense(
+    BuildContext context, Expense expense) async {
   final shouldDelete = await showDialog<bool>(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
         title: const Text('Excluir gasto?'),
-        content: Text('O gasto "${expense.description}" sera removido da lista.'),
+        content:
+            Text('O gasto "${expense.description}" sera removido da lista.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),

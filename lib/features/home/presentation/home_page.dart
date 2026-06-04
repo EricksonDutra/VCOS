@@ -108,10 +108,12 @@ class _SummaryCard extends StatelessWidget {
                 children: [
                   Text(label, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(value, style: Theme.of(context).textTheme.headlineMedium),
+                  Text(value,
+                      style: Theme.of(context).textTheme.headlineMedium),
                   if (detail != null) ...[
                     const SizedBox(height: AppSpacing.xs),
-                    Text(detail!, style: Theme.of(context).textTheme.bodyMedium),
+                    Text(detail!,
+                        style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ],
               ),
@@ -134,7 +136,9 @@ class _SyncStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = pendingCount == 0 ? 'Tudo salvo localmente' : '$pendingCount itens aguardando sincronizacao';
+    final status = pendingCount == 0
+        ? 'Tudo salvo localmente'
+        : '$pendingCount itens aguardando sincronizacao';
 
     return Card(
       child: Padding(
