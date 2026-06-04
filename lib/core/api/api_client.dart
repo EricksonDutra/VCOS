@@ -29,16 +29,20 @@ class ApiClient {
         ? Uri.parse('$_baseUrl/sales')
         : Uri.parse('$_baseUrl/sales/${sale.remoteId}');
     final response = sale.remoteId == null
-        ? await _httpClient.post(
-            uri,
-            headers: _jsonHeaders,
-            body: jsonEncode(_salePayload(sale)),
-          ).timeout(_requestTimeout)
-        : await _httpClient.put(
-            uri,
-            headers: _jsonHeaders,
-            body: jsonEncode(_salePayload(sale)),
-          ).timeout(_requestTimeout);
+        ? await _httpClient
+            .post(
+              uri,
+              headers: _jsonHeaders,
+              body: jsonEncode(_salePayload(sale)),
+            )
+            .timeout(_requestTimeout)
+        : await _httpClient
+            .put(
+              uri,
+              headers: _jsonHeaders,
+              body: jsonEncode(_salePayload(sale)),
+            )
+            .timeout(_requestTimeout);
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw ApiException('Falha ao sincronizar venda ${sale.id}.');
@@ -50,10 +54,12 @@ class ApiClient {
 
   Future<void> deleteSale(Sale sale) async {
     final remoteId = sale.remoteId ?? sale.id;
-    final response = await _httpClient.delete(
-      Uri.parse('$_baseUrl/sales/$remoteId'),
-      headers: _jsonHeaders,
-    ).timeout(_requestTimeout);
+    final response = await _httpClient
+        .delete(
+          Uri.parse('$_baseUrl/sales/$remoteId'),
+          headers: _jsonHeaders,
+        )
+        .timeout(_requestTimeout);
 
     if (response.statusCode == 404) return;
     if (response.statusCode < 200 || response.statusCode >= 300) {

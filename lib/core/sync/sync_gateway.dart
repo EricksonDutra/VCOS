@@ -37,9 +37,7 @@ class PendingApiSyncGateway implements SyncGateway {
 }
 
 class ApiSyncGateway implements SyncGateway {
-  ApiSyncGateway({
-    ApiClient? apiClient,
-  }) : _apiClient = apiClient ?? ApiClient();
+  ApiSyncGateway({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
 
   final ApiClient _apiClient;
 
