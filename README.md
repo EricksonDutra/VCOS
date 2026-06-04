@@ -33,6 +33,7 @@ O **VCOS** centraliza a rotina financeira de um ateliê em uma experiência mobi
 ## Stack
 
 - **Flutter / Dart** para aplicação multiplataforma.
+- **FastAPI / Python** para API backend.
 - **Provider** para gerenciamento de estado.
 - **sqflite** para armazenamento local.
 - **intl** para formatação.
@@ -65,6 +66,14 @@ test/
 integration_test/
 web/
 android/
+backend/
+  app/
+    api/
+    core/
+    main.py
+  Dockerfile
+  requirements.txt
+docker-compose.yml
 ```
 
 ## Imagens do Projeto
@@ -110,6 +119,34 @@ Analise o código:
 ```bash
 flutter analyze
 ```
+
+### Backend FastAPI
+
+Execute a API com Docker a partir da raiz:
+
+```bash
+docker compose up -d --build
+```
+
+Teste o health check:
+
+```bash
+curl http://localhost:8000/api/v1/health
+```
+
+A documentação interativa fica em:
+
+```text
+http://localhost:8000/docs
+```
+
+Para configuração local ou produção, copie o exemplo de variáveis:
+
+```bash
+copy backend\.env.example backend\.env
+```
+
+Na VPS, o fluxo recomendado é clonar o repositório, ajustar `backend/.env` e subir com `docker compose up -d --build`. Depois coloque Caddy ou Nginx na frente para domínio e HTTPS.
 
 ## Fluxo de Desenvolvimento
 
