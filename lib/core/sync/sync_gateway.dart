@@ -67,9 +67,8 @@ class ApiSyncGateway implements SyncGateway {
         syncedSales[sale.id] = remoteId;
       }
 
-      final ignoredExpensesMessage = expenses.isEmpty
-          ? ''
-          : ' Gastos continuam pendentes por enquanto.';
+      final ignoredExpensesMessage =
+          expenses.isEmpty ? '' : ' Gastos continuam pendentes por enquanto.';
       return SyncResult(
         success: true,
         syncedSales: syncedSales,
