@@ -39,8 +39,10 @@ class _AppShellPageState extends State<AppShellPage> {
     final selectedTab = appTabs[_selectedIndex];
     final controller = context.watch<VcosController>();
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
-    final tabTransitionDuration = reduceMotion ? Duration.zero : const Duration(milliseconds: 260);
-    final splashDuration = reduceMotion ? Duration.zero : const Duration(milliseconds: 420);
+    final tabTransitionDuration =
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 260);
+    final splashDuration =
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 420);
 
     final message = controller.message;
     if (message != null && message.isNotEmpty) {
@@ -126,7 +128,9 @@ class _AppShellPageState extends State<AppShellPage> {
                 .toList(),
           ),
           floatingActionButton: AnimatedScale(
-            duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 180),
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 180),
             scale: _showSplash ? 0.92 : 1,
             child: FloatingActionButton.extended(
               onPressed: () => _handlePrimaryAction(context),
@@ -204,7 +208,8 @@ class _SplashScreen extends StatelessWidget {
       child: Center(
         child: TweenAnimationBuilder<double>(
           tween: Tween(begin: 0, end: 1),
-          duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 850),
+          duration:
+              reduceMotion ? Duration.zero : const Duration(milliseconds: 850),
           curve: Curves.easeOutBack,
           builder: (context, value, child) {
             return Opacity(

@@ -18,18 +18,18 @@ class VcosLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final textScale = size / 64;
     final titleStyle = Theme.of(context).textTheme.headlineMedium?.copyWith(
-          color: AppColors.threadBrown,
-          fontSize: 30 * textScale,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 0,
-          shadows: [
-            const Shadow(
-              color: Color(0x33000000),
-              blurRadius: 0,
-              offset: Offset(0, 1),
-            ),
-          ],
-        );
+      color: AppColors.threadBrown,
+      fontSize: 30 * textScale,
+      fontWeight: FontWeight.w900,
+      letterSpacing: 0,
+      shadows: [
+        const Shadow(
+          color: Color(0x33000000),
+          blurRadius: 0,
+          offset: Offset(0, 1),
+        ),
+      ],
+    );
 
     return Semantics(
       label: 'Logo VCOS, feito a mao com amor',

@@ -65,7 +65,8 @@ void main() {
     });
 
     test('uses extra large Material 3 navigation targets', () {
-      final navTheme = AppTheme.create(useGoogleFonts: false).navigationBarTheme;
+      final navTheme =
+          AppTheme.create(useGoogleFonts: false).navigationBarTheme;
       final selectedStyle = navTheme.labelTextStyle?.resolve({
         WidgetState.selected,
       });

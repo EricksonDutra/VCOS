@@ -54,7 +54,8 @@ class _SaleDialogState extends State<_SaleDialog> {
     if (sale == null) return;
     _descriptionController.text = sale.description;
     _customerController.text = sale.customerName;
-    _amountController.text = sale.amount.toStringAsFixed(2).replaceAll('.', ',');
+    _amountController.text =
+        sale.amount.toStringAsFixed(2).replaceAll('.', ',');
     _notesController.text = sale.notes;
   }
 
@@ -164,7 +165,8 @@ class _ExpenseDialogState extends State<_ExpenseDialog> {
     if (expense == null) return;
     _descriptionController.text = expense.description;
     _categoryController.text = expense.category;
-    _amountController.text = expense.amount.toStringAsFixed(2).replaceAll('.', ',');
+    _amountController.text =
+        expense.amount.toStringAsFixed(2).replaceAll('.', ',');
     _notesController.text = expense.notes;
   }
 
@@ -585,9 +587,8 @@ class _SuggestionTextFieldState extends State<_SuggestionTextField> {
           decoration: InputDecoration(
             labelText: widget.label,
             hintText: widget.hint,
-            suffixIcon: suggestions.isEmpty
-                ? null
-                : const Icon(Icons.history_rounded),
+            suffixIcon:
+                suggestions.isEmpty ? null : const Icon(Icons.history_rounded),
           ),
           onChanged: (_) {
             setState(() {});

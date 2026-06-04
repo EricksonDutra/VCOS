@@ -18,9 +18,8 @@ class ExpensesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<VcosController>(
       builder: (context, controller, _) {
-        final expenses = controller.expenses
-            .where((expense) => !expense.isDeleted)
-            .toList();
+        final expenses =
+            controller.expenses.where((expense) => !expense.isDeleted).toList();
 
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 110),
@@ -43,7 +42,9 @@ class ExpensesPage extends StatelessWidget {
                   ),
                 )
               else
-                ...expenses.map((expense) => _ExpenseTile(expense: expense)).expand(
+                ...expenses
+                    .map((expense) => _ExpenseTile(expense: expense))
+                    .expand(
                       (item) => [item, const SizedBox(height: AppSpacing.md)],
                     ),
             ],
@@ -155,13 +156,15 @@ class _ExpenseTile extends StatelessWidget {
   }
 }
 
-Future<void> _confirmDeleteExpense(BuildContext context, Expense expense) async {
+Future<void> _confirmDeleteExpense(
+    BuildContext context, Expense expense) async {
   final shouldDelete = await showDialog<bool>(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
         title: const Text('Excluir gasto?'),
-        content: Text('O gasto "${expense.description}" sera removido da lista.'),
+        content:
+            Text('O gasto "${expense.description}" sera removido da lista.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),

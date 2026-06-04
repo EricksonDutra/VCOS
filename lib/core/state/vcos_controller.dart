@@ -257,9 +257,8 @@ class VcosController extends ChangeNotifier {
     notifyListeners();
 
     final result = await _syncGateway.pushChanges(
-      sales: _sales
-          .where((sale) => sale.syncStatus != SyncStatus.synced)
-          .toList(),
+      sales:
+          _sales.where((sale) => sale.syncStatus != SyncStatus.synced).toList(),
       expenses: _expenses
           .where((expense) => expense.syncStatus != SyncStatus.synced)
           .toList(),
