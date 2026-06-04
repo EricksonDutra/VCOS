@@ -1,15 +1,15 @@
 name: vcos_app
 description: "Um app para uma artesa"
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.3.4 <4.0.0'
+  sdk: ">=3.3.4 <4.0.0"
 
 dependencies:
+  fl_chart: ^0.69.0
   flutter:
     sdk: flutter
-  fl_chart: ^0.69.0
   google_fonts: ^6.2.1
   http: ^1.2.2
   image_picker: ^1.1.2
@@ -23,11 +23,11 @@ dependencies:
   sqflite: ^2.3.3+1
 
 dev_dependencies:
-  integration_test:
-    sdk: flutter
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

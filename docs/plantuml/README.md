@@ -11,4 +11,3 @@ Para renderizar localmente:
 ```bash
 plantuml docs/plantuml/*.puml
 ```
-

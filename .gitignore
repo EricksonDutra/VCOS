@@ -31,6 +31,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Local tool caches
+.npm-cache/
+
 # Symbolication related
 app.*.symbols
 

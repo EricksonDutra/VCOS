@@ -1,6 +1,7 @@
 # Guia de Contribuicao
 
-Este projeto usa um fluxo simples para manter qualidade, rastreabilidade e padronizacao entre desenvolvimento, testes e releases.
+Este projeto usa um fluxo simples para manter qualidade, rastreabilidade e padronizacao entre
+desenvolvimento, testes e releases.
 
 ## Branches
 
@@ -45,6 +46,11 @@ flutter pub get
 dart format --set-exit-if-changed lib test integration_test
 flutter analyze
 flutter test
+pip install -r backend/requirements-dev.txt
+python -m compileall backend/app
+ruff format --check backend/app
+ruff check backend/app
+npx --yes prettier@3.5.3 --check "**/*.{md,yml,yaml,json}"
 ```
 
 ## CI/CD
@@ -57,6 +63,8 @@ O GitHub Actions executa:
 - Verificacao de formatacao com `dart format --set-exit-if-changed lib test integration_test`.
 - Analise estatica com `flutter analyze`.
 - Testes automatizados com `flutter test --coverage`.
+- Verificacao Python com `ruff format --check backend/app` e `ruff check backend/app`.
+- Verificacao de docs/configs com `prettier`.
 - Build de APK release quando uma tag `vX.Y.Z` for publicada.
 
 ## Tags e releases

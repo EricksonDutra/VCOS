@@ -2,14 +2,14 @@ import 'package:intl/intl.dart';
 
 final _moneyFormatter = NumberFormat.currency(
   locale: 'pt_BR',
-  symbol: 'R\$',
+  symbol: r'R$',
 );
 
 String formatMoney(double value) => _moneyFormatter.format(value);
 
 double parseMoney(String value) {
   final normalized = value
-      .replaceAll('R\$', '')
+      .replaceAll(r'R$', '')
       .replaceAll('.', '')
       .replaceAll(',', '.')
       .trim();
