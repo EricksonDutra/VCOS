@@ -1,0 +1,226 @@
+@startuml VCOS_Class_Diagram
+title VCOS - Diagrama de Classes
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam class {
+  BorderColor #555555
+  BackgroundColor #FFFFFF
+}
+skinparam interface {
+  BorderColor #555555
+  BackgroundColor #F9F3EE
+}
+skinparam enum {
+  BorderColor #555555
+  BackgroundColor #EEF7F0
+}
+
+class VcosApp {
+  +bool useGoogleFonts
+  +bool showSplash
+  +bool useLocalDatabase
+  +VcosRepository? repository
+  +build(context)
+}
+
+class VcosController {
+  -VcosRepository _repository
+  -SyncGateway _syncGateway
+  -List<Sale> _sales
+  -List<Expense> _expenses
+  -Map<String, List<String>> _suggestions
+  -AppSettings _settings
+  -int _pendingSyncCount
+  -bool _isLoading
+  -bool _isSyncing
+  -String? _message
+  +List<Sale> get sales
+  +List<Expense> get expenses
+  +AppSettings get settings
+  +DashboardSummary get summary
+  +Future<void> load()
+  +Future<void> addSale(...)
+  +Future<void> updateSale(...)
+  +Future<void> deleteSale(Sale sale)
+  +Future<void> addExpense(...)
+  +Future<void> updateExpense(...)
+  +Future<void> deleteExpense(Expense expense)
+  +Future<void> updateSettings(AppSettings settings)
+  +Future<void> runAutoSync()
+  +Future<void> rememberSuggestion(String field, String value)
+}
+
+interface VcosRepository {
+  +Future<List<Sale>> loadSales()
+  +Future<List<Expense>> loadExpenses()
+  +Future<AppSettings> loadSettings()
+  +Future<int> loadPendingSyncCount()
+  +Future<List<String>> loadSuggestions(String field)
+  +Future<void> saveSale(Sale sale)
+  +Future<void> saveExpense(Expense expense)
+  +Future<void> saveSettings(AppSettings settings)
+  +Future<void> saveSuggestion(...)
+  +Future<void> enqueueSync(...)
+}
+
+class SqfliteVcosRepository {
+  -LocalDatabase _localDatabase
+  -Future<Database> get _database
+  +Future<List<Sale>> loadSales()
+  +Future<List<Expense>> loadExpenses()
+  +Future<AppSettings> loadSettings()
+  +Future<int> loadPendingSyncCount()
+  +Future<List<String>> loadSuggestions(String field)
+  +Future<void> saveSale(Sale sale)
+  +Future<void> saveExpense(Expense expense)
+  +Future<void> saveSettings(AppSettings settings)
+  +Future<void> saveSuggestion(...)
+  +Future<void> enqueueSync(...)
+}
+
+class MemoryVcosRepository {
+  -List<Sale> _sales
+  -List<Expense> _expenses
+  -AppSettings _settings
+  -int _pendingSyncCount
+  -Map<String, List<String>> _suggestions
+}
+
+class LocalDatabase {
+  -Database? _database
+  +Future<Database> get instance
+  -Future<void> _ensureExpensePhotoPathsColumn(Database database)
+  -Future<void> _createSuggestionsTable(Database database)
+}
+
+interface SyncGateway {
+  +Future<SyncResult> pushChanges(List<Sale> sales, List<Expense> expenses)
+}
+
+class PendingApiSyncGateway {
+  +Future<SyncResult> pushChanges(List<Sale> sales, List<Expense> expenses)
+}
+
+class SyncResult {
+  +bool success
+  +String message
+}
+
+class Sale {
+  +String id
+  +String? remoteId
+  +String description
+  +String customerName
+  +double amount
+  +String notes
+  +DateTime createdAt
+  +DateTime updatedAt
+  +DateTime? deletedAt
+  +SyncStatus syncStatus
+  +bool get isDeleted
+  +Sale copyWith(...)
+  +Map<String, Object?> toMap()
+  +static Sale fromMap(Map<String, Object?> map)
+}
+
+class Expense {
+  +String id
+  +String? remoteId
+  +String description
+  +String category
+  +double amount
+  +String notes
+  +List<String> photoPaths
+  +DateTime createdAt
+  +DateTime updatedAt
+  +DateTime? deletedAt
+  +SyncStatus syncStatus
+  +bool get isDeleted
+  +Expense copyWith(...)
+  +Map<String, Object?> toMap()
+  +static Expense fromMap(Map<String, Object?> map)
+}
+
+class AppSettings {
+  +String studioName
+  +String ownerName
+  +String phone
+  +bool autoSyncEnabled
+  +bool highContrastEnabled
+  +DateTime updatedAt
+  +static AppSettings defaults()
+  +AppSettings copyWith(...)
+  +Map<String, Object?> toMap()
+  +static AppSettings fromMap(Map<String, Object?> map)
+}
+
+class DashboardSummary {
+  +double salesTotal
+  +double expensesTotal
+  +int pendingSyncCount
+  +int salesCount
+  +int expensesCount
+  +double get balance
+  +factory fromRecords(...)
+}
+
+enum SyncStatus {
+  synced
+  pending
+  failed
+  +static SyncStatus fromName(String? name)
+}
+
+class AppShellPage
+class HomePage
+class SalesPage
+class ExpensesPage
+class ExpenseDetailPage
+class ReportsPage
+class SettingsPage
+
+VcosApp --> VcosController : cria Provider
+VcosApp --> VcosRepository : recebe opcionalmente
+VcosApp --> SqfliteVcosRepository : usa por padrão
+VcosApp ..> MemoryVcosRepository : alternativa
+
+AppShellPage --> HomePage
+AppShellPage --> SalesPage
+AppShellPage --> ExpensesPage
+AppShellPage --> ReportsPage
+AppShellPage --> SettingsPage
+
+HomePage --> VcosController
+SalesPage --> VcosController
+ExpensesPage --> VcosController
+ExpenseDetailPage --> Expense
+ReportsPage --> VcosController
+SettingsPage --> VcosController
+
+VcosController --> VcosRepository
+VcosController --> SyncGateway
+VcosController "1" o-- "*" Sale
+VcosController "1" o-- "*" Expense
+VcosController "1" o-- "1" AppSettings
+VcosController ..> DashboardSummary : calcula
+
+VcosRepository <|.. SqfliteVcosRepository
+VcosRepository <|.. MemoryVcosRepository
+SqfliteVcosRepository --> LocalDatabase
+SqfliteVcosRepository ..> Sale : mapeia
+SqfliteVcosRepository ..> Expense : mapeia
+SqfliteVcosRepository ..> AppSettings : mapeia
+
+SyncGateway <|.. PendingApiSyncGateway
+PendingApiSyncGateway --> SyncResult
+
+Sale --> SyncStatus
+Expense --> SyncStatus
+DashboardSummary ..> Sale
+DashboardSummary ..> Expense
+
+@enduml
+
