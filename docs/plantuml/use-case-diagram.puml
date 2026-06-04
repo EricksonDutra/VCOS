@@ -1,0 +1,83 @@
+@startuml VCOS_Use_Cases
+title VCOS - Diagrama de Caso de Uso
+
+left to right direction
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam package {
+  BorderColor #555555
+  BackgroundColor #F9F3EE
+}
+skinparam usecase {
+  BorderColor #555555
+  BackgroundColor #FFFFFF
+}
+skinparam actor {
+  BorderColor #555555
+}
+
+actor "Artesã / Responsável\ndo ateliê" as User
+actor "API de sincronização\nfutura" as Api
+actor "Sistema de arquivos\ndo dispositivo" as Files
+
+rectangle "VCOS" {
+  usecase "Visualizar resumo\nfinanceiro" as UC_Home
+  usecase "Cadastrar venda" as UC_AddSale
+  usecase "Editar venda" as UC_EditSale
+  usecase "Excluir venda\nlogicamente" as UC_DeleteSale
+  usecase "Cadastrar gasto" as UC_AddExpense
+  usecase "Editar gasto" as UC_EditExpense
+  usecase "Excluir gasto\nlogicamente" as UC_DeleteExpense
+  usecase "Anexar fotos\na um gasto" as UC_AttachPhotos
+  usecase "Consultar detalhe\nde gasto" as UC_ExpenseDetail
+  usecase "Consultar relatórios" as UC_Reports
+  usecase "Configurar dados\ndo ateliê" as UC_Settings
+  usecase "Ativar/desativar\nsincronização automática" as UC_AutoSync
+  usecase "Ativar/desativar\nalto contraste" as UC_Contrast
+  usecase "Usar sugestões\nde preenchimento" as UC_Suggestions
+  usecase "Salvar dados\noffline" as UC_Offline
+  usecase "Enfileirar alteração\npara sincronização" as UC_Queue
+  usecase "Tentar sincronizar\nautomaticamente" as UC_Sync
+}
+
+User --> UC_Home
+User --> UC_AddSale
+User --> UC_EditSale
+User --> UC_DeleteSale
+User --> UC_AddExpense
+User --> UC_EditExpense
+User --> UC_DeleteExpense
+User --> UC_ExpenseDetail
+User --> UC_Reports
+User --> UC_Settings
+User --> UC_AutoSync
+User --> UC_Contrast
+
+UC_AddSale .> UC_Offline : <<include>>
+UC_EditSale .> UC_Offline : <<include>>
+UC_DeleteSale .> UC_Offline : <<include>>
+UC_AddExpense .> UC_Offline : <<include>>
+UC_EditExpense .> UC_Offline : <<include>>
+UC_DeleteExpense .> UC_Offline : <<include>>
+UC_Settings .> UC_Offline : <<include>>
+
+UC_AddSale .> UC_Suggestions : <<include>>
+UC_AddExpense .> UC_Suggestions : <<include>>
+UC_AttachPhotos .> UC_AddExpense : <<extend>>
+UC_AttachPhotos .> UC_EditExpense : <<extend>>
+UC_Offline .> UC_Queue : <<include>>
+UC_Queue .> UC_Sync : <<extend>>
+
+UC_AttachPhotos --> Files : seleciona e referencia imagens
+UC_Sync ..> Api : integração pendente
+
+note bottom of UC_Sync
+  Atualmente o PendingApiSyncGateway
+  retorna que a API ainda não está configurada.
+end note
+
+@enduml
+

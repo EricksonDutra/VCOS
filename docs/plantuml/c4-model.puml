@@ -1,0 +1,174 @@
+@startuml VCOS_C4_Context
+title VCOS - C4 Model - Nível 1: Contexto do Sistema
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam ArrowColor #555555
+skinparam rectangle {
+  BorderColor #555555
+  BackgroundColor #F9F3EE
+}
+
+actor "Artesã / Responsável\ndo ateliê" as User
+
+rectangle "VCOS\nAplicativo Flutter offline-first\npara gestão de vendas, gastos,\nrelatórios e configurações" as VCOS
+
+database "Banco local SQLite\nvcos_offline.db" as SQLite
+cloud "API futura de sincronização\n(ainda não configurada)" as Api
+folder "Arquivos locais de fotos\nanexos de gastos" as Photos
+
+User --> VCOS : Registra vendas e gastos\nconsulta indicadores\najusta configurações
+VCOS --> SQLite : Persiste dados locais,\nsugestões e fila de sincronização
+VCOS --> Photos : Referencia caminhos de fotos\nselecionadas no aparelho
+VCOS ..> Api : Enviará alterações pendentes\nquando a API for implementada
+
+note right of VCOS
+  O app funciona mesmo sem internet.
+  Alterações são salvas localmente
+  e marcadas como pendentes de sincronização.
+end note
+
+@enduml
+
+@startuml VCOS_C4_Containers
+title VCOS - C4 Model - Nível 2: Contêineres
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam ArrowColor #555555
+skinparam rectangle {
+  BorderColor #555555
+  BackgroundColor #F9F3EE
+}
+skinparam database {
+  BorderColor #555555
+  BackgroundColor #EEF7F0
+}
+
+actor "Artesã / Responsável" as User
+
+rectangle "Dispositivo Android/Web" as Device {
+  rectangle "VCOS App\nFlutter + Dart" as App {
+    rectangle "Camada de apresentação\nfeatures/*/presentation\nShell, Início, Vendas, Gastos,\nRelatórios e Configurações" as Presentation
+    rectangle "Gerenciamento de estado\nProvider + VcosController" as State
+    rectangle "Domínio e modelos\nSale, Expense, AppSettings,\nDashboardSummary, SyncStatus" as Domain
+    rectangle "Acesso a dados\nVcosRepository\nSqfliteVcosRepository\nMemoryVcosRepository" as Data
+    rectangle "Gateway de sincronização\nSyncGateway\nPendingApiSyncGateway" as Sync
+  }
+
+  database "SQLite local\nsales, expenses, app_settings,\nsync_queue, field_suggestions" as LocalDb
+  folder "Armazenamento local\ncaminhos de fotos" as LocalFiles
+}
+
+cloud "API externa futura" as ExternalApi
+
+User --> Presentation : Usa telas e formulários
+Presentation --> State : Observa estado e dispara ações
+State --> Domain : Cria e atualiza objetos de domínio
+State --> Data : Carrega, salva e enfileira sincronização
+Data --> LocalDb : Lê e grava registros locais
+Domain --> LocalFiles : Expense.photoPaths referencia anexos
+State --> Sync : Tenta sincronização automática
+Sync ..> ExternalApi : Integração pendente
+
+@enduml
+
+@startuml VCOS_C4_Components
+title VCOS - C4 Model - Nível 3: Componentes do App Flutter
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam ArrowColor #555555
+skinparam component {
+  BorderColor #555555
+  BackgroundColor #F9F3EE
+}
+skinparam database {
+  BorderColor #555555
+  BackgroundColor #EEF7F0
+}
+
+package "app" {
+  component "VcosApp" as VcosApp
+}
+
+package "features/shell" {
+  component "AppShellPage" as Shell
+  component "appTabs" as Tabs
+}
+
+package "features" {
+  component "HomePage" as Home
+  component "SalesPage" as Sales
+  component "ExpensesPage" as Expenses
+  component "ExpenseDetailPage" as ExpenseDetail
+  component "ReportsPage" as Reports
+  component "SettingsPage" as Settings
+  component "record_forms" as Forms
+  component "SyncStatusIcon" as SyncIcon
+}
+
+package "core/state" {
+  component "VcosController\nChangeNotifier" as Controller
+}
+
+package "core/data" {
+  interface "VcosRepository" as Repository
+  component "SqfliteVcosRepository" as SqfliteRepo
+  component "MemoryVcosRepository" as MemoryRepo
+  component "LocalDatabase" as LocalDatabase
+}
+
+package "core/models" {
+  component "Sale" as Sale
+  component "Expense" as Expense
+  component "AppSettings" as AppSettings
+  component "DashboardSummary" as Summary
+}
+
+package "core/sync" {
+  interface "SyncGateway" as SyncGateway
+  component "PendingApiSyncGateway" as PendingSync
+}
+
+database "SQLite\nvcos_offline.db" as SQLite
+
+VcosApp --> Shell : define home
+VcosApp --> Controller : injeta via Provider
+VcosApp --> SqfliteRepo : padrão
+VcosApp ..> MemoryRepo : alternativa para testes
+Shell --> Tabs : monta navegação
+Tabs --> Home
+Tabs --> Sales
+Tabs --> Expenses
+Tabs --> Reports
+Tabs --> Settings
+Shell --> Forms : ação primária abre diálogos
+Home --> Controller : lê resumo
+Sales --> Controller : lista e altera vendas
+Expenses --> Controller : lista e altera gastos
+ExpenseDetail --> Expense : exibe detalhes
+Reports --> Controller : lê indicadores
+Settings --> Controller : atualiza preferências
+Forms --> Controller : add/update Sale e Expense
+SyncIcon --> Sale
+SyncIcon --> Expense
+Controller --> Repository
+Controller --> SyncGateway
+Controller --> Sale
+Controller --> Expense
+Controller --> AppSettings
+Controller --> Summary
+SqfliteRepo ..|> Repository
+MemoryRepo ..|> Repository
+SqfliteRepo --> LocalDatabase
+LocalDatabase --> SQLite
+PendingSync ..|> SyncGateway
+
+@enduml
