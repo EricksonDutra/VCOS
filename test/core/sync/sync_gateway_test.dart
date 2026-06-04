@@ -106,6 +106,9 @@ void main() {
       '/api/v1/expenses',
       '/api/v1/settings',
     ]);
-    expect(requests.first.body, contains('"photo_paths":["storage/photo.jpg"]'));
+    expect(
+      requests.first.body,
+      contains('"photo_paths":["storage/photo.jpg"]'),
+    );
   });
 }
