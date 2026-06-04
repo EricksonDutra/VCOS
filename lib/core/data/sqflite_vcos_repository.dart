@@ -60,6 +60,26 @@ class SqfliteVcosRepository implements VcosRepository {
   }
 
   @override
+  Future<bool> hasPendingSync({
+    required String entityType,
+    String? entityId,
+  }) async {
+    final database = await _database;
+    final where = entityId == null
+        ? 'entity_type = ?'
+        : 'entity_type = ? AND entity_id = ?';
+    final whereArgs = entityId == null ? [entityType] : [entityType, entityId];
+    final rows = await database.query(
+      'sync_queue',
+      columns: ['id'],
+      where: where,
+      whereArgs: whereArgs,
+      limit: 1,
+    );
+    return rows.isNotEmpty;
+  }
+
+  @override
   Future<List<String>> loadSuggestions(String field) async {
     final database = await _database;
     final rows = await database.query(
@@ -173,6 +193,19 @@ class SqfliteVcosRepository implements VcosRepository {
     if (entityType == 'sale') {
       await database.update(
         'sales',
+        {
+          'remote_id': remoteId,
+          'sync_status': SyncStatus.synced.name,
+          'updated_at': now,
+        },
+        where: 'id = ?',
+        whereArgs: [entityId],
+      );
+    }
+
+    if (entityType == 'expense') {
+      await database.update(
+        'expenses',
         {
           'remote_id': remoteId,
           'sync_status': SyncStatus.synced.name,

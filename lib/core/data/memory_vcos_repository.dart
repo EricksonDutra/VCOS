@@ -9,6 +9,7 @@ class MemoryVcosRepository implements VcosRepository {
   final List<Expense> _expenses = [];
   var _settings = AppSettings.defaults();
   var _pendingSyncCount = 0;
+  final Set<String> _pendingSyncKeys = {};
   final Map<String, List<String>> _suggestions = {};
 
   @override
@@ -22,6 +23,17 @@ class MemoryVcosRepository implements VcosRepository {
 
   @override
   Future<int> loadPendingSyncCount() async => _pendingSyncCount;
+
+  @override
+  Future<bool> hasPendingSync({
+    required String entityType,
+    String? entityId,
+  }) async {
+    if (entityId == null) {
+      return _pendingSyncKeys.any((key) => key.startsWith('$entityType:'));
+    }
+    return _pendingSyncKeys.contains('$entityType:$entityId');
+  }
 
   @override
   Future<List<String>> loadSuggestions(String field) async {
@@ -66,7 +78,10 @@ class MemoryVcosRepository implements VcosRepository {
     required String entityId,
     required String operation,
   }) async {
-    _pendingSyncCount += 1;
+    final key = '$entityType:$entityId';
+    if (_pendingSyncKeys.add(key)) {
+      _pendingSyncCount += 1;
+    }
   }
 
   @override
@@ -75,12 +90,24 @@ class MemoryVcosRepository implements VcosRepository {
     required String entityId,
     String? remoteId,
   }) async {
-    if (_pendingSyncCount > 0) _pendingSyncCount -= 1;
+    if (_pendingSyncKeys.remove('$entityType:$entityId') &&
+        _pendingSyncCount > 0) {
+      _pendingSyncCount -= 1;
+    }
 
     if (entityType == 'sale') {
       final index = _sales.indexWhere((sale) => sale.id == entityId);
       if (index == -1) return;
       _sales[index] = _sales[index].copyWith(
+        remoteId: remoteId,
+        syncStatus: SyncStatus.synced,
+      );
+    }
+
+    if (entityType == 'expense') {
+      final index = _expenses.indexWhere((expense) => expense.id == entityId);
+      if (index == -1) return;
+      _expenses[index] = _expenses[index].copyWith(
         remoteId: remoteId,
         syncStatus: SyncStatus.synced,
       );
