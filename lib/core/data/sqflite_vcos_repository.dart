@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/app_settings.dart';
 import '../models/expense.dart';
 import '../models/sale.dart';
+import 'sync_status.dart';
 import 'local_database.dart';
 import 'vcos_repository.dart';
 
@@ -158,5 +159,34 @@ class SqfliteVcosRepository implements VcosRepository {
       'attempted_at': null,
       'error_message': null,
     });
+  }
+
+  @override
+  Future<void> completeSync({
+    required String entityType,
+    required String entityId,
+    String? remoteId,
+  }) async {
+    final database = await _database;
+    final now = DateTime.now().toIso8601String();
+
+    if (entityType == 'sale') {
+      await database.update(
+        'sales',
+        {
+          'remote_id': remoteId,
+          'sync_status': SyncStatus.synced.name,
+          'updated_at': now,
+        },
+        where: 'id = ?',
+        whereArgs: [entityId],
+      );
+    }
+
+    await database.delete(
+      'sync_queue',
+      where: 'entity_type = ? AND entity_id = ?',
+      whereArgs: [entityType, entityId],
+    );
   }
 }
