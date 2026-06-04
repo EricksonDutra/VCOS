@@ -19,7 +19,7 @@ void main() {
       );
     });
     final gateway = ApiSyncGateway(
-      apiClient: ApiClient(
+      client: ApiClient(
         config: const ApiConfig(baseUrl: 'http://localhost:8000/api/v1'),
         httpClient: httpClient,
       ),
