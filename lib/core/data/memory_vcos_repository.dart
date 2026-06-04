@@ -1,6 +1,7 @@
 import '../models/app_settings.dart';
 import '../models/expense.dart';
 import '../models/sale.dart';
+import 'sync_status.dart';
 import 'vcos_repository.dart';
 
 class MemoryVcosRepository implements VcosRepository {
@@ -66,5 +67,23 @@ class MemoryVcosRepository implements VcosRepository {
     required String operation,
   }) async {
     _pendingSyncCount += 1;
+  }
+
+  @override
+  Future<void> completeSync({
+    required String entityType,
+    required String entityId,
+    String? remoteId,
+  }) async {
+    if (_pendingSyncCount > 0) _pendingSyncCount -= 1;
+
+    if (entityType == 'sale') {
+      final index = _sales.indexWhere((sale) => sale.id == entityId);
+      if (index == -1) return;
+      _sales[index] = _sales[index].copyWith(
+        remoteId: remoteId,
+        syncStatus: SyncStatus.synced,
+      );
+    }
   }
 }

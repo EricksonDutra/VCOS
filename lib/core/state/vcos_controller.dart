@@ -264,6 +264,14 @@ class VcosController extends ChangeNotifier {
           .toList(),
     );
 
+    for (final entry in result.syncedSales.entries) {
+      await _repository.completeSync(
+        entityType: 'sale',
+        entityId: entry.key,
+        remoteId: entry.value,
+      );
+    }
+    await _refreshRecords();
     _message = result.message;
     _isSyncing = false;
     notifyListeners();

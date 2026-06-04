@@ -21,4 +21,9 @@ abstract class VcosRepository {
     required String entityId,
     required String operation,
   });
+  Future<void> completeSync({
+    required String entityType,
+    required String entityId,
+    String? remoteId,
+  });
 }
