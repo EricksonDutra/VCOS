@@ -45,7 +45,7 @@ Antes de abrir um pull request, rode:
 
 ```bash
 flutter pub get
-dart format --set-exit-if-changed lib test integration_test
+powershell -NoProfile -ExecutionPolicy Bypass -File .github/scripts/dart_format_check.ps1
 flutter analyze
 flutter test
 pip install -r backend/requirements-dev.txt
@@ -62,7 +62,7 @@ O GitHub Actions executa:
 - Validacao do nome da branch.
 - Validacao das mensagens de commit.
 - Instalacao das dependencias Flutter.
-- Verificacao de formatacao com `dart format --set-exit-if-changed lib test integration_test`.
+- Verificacao de formatacao com `.github/scripts/dart_format_check.ps1`.
 - Analise estatica com `flutter analyze`.
 - Testes automatizados com `flutter test --coverage`.
 - Verificacao Python com `ruff format --check backend/app` e `ruff check backend/app`.

@@ -32,6 +32,7 @@ migrate_working_dir/
 /build/
 
 # Local tool caches
+.dart-cli-home/
 .npm-cache/
 
 # Symbolication related
