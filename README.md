@@ -19,16 +19,25 @@
 
 ## Sobre o Projeto
 
-O **VCOS** centraliza a rotina financeira de um ateliê em uma experiência mobile limpa, acessível e preparada para funcionar offline. A proposta é permitir que a artesã registre vendas, acompanhe gastos, visualize indicadores e mantenha os dados essenciais do negócio mesmo antes da integração definitiva com uma API.
+O **VCOS** centraliza a rotina financeira de um ateliê em uma experiência mobile limpa, acessível e
+preparada para funcionar offline. A proposta é permitir que a artesã registre vendas, acompanhe
+gastos, visualize indicadores e mantenha os dados essenciais do negócio mesmo antes da integração
+definitiva com uma API.
 
 ## Funcionalidades
 
-- **Início:** resumo financeiro do ateliê com saldo, total de vendas, total de gastos e status de sincronização.
-- **Vendas:** cadastro, edição e exclusão lógica de vendas, com cliente, valor, data e sugestões de preenchimento.
-- **Gastos:** cadastro, edição, exclusão lógica e visualização detalhada de despesas, incluindo suporte a fotos.
-- **Relatórios:** visão consolidada de entradas, saídas, saldo e proporção dos gastos sobre as vendas.
-- **Configurações:** dados do ateliê, responsável, telefone, sincronização automática e preferência de alto contraste.
-- **Offline-first:** persistência local com `sqflite` e fila de sincronização para integração futura.
+- **Início:** resumo financeiro do ateliê com saldo, total de vendas, total de gastos e status de
+  sincronização.
+- **Vendas:** cadastro, edição e exclusão lógica de vendas, com cliente, valor, data e sugestões de
+  preenchimento.
+- **Gastos:** cadastro, edição, exclusão lógica e visualização detalhada de despesas, incluindo
+  suporte a fotos.
+- **Relatórios:** visão consolidada de entradas, saídas, saldo e proporção dos gastos sobre as
+  vendas.
+- **Configurações:** dados do ateliê, responsável, telefone, sincronização automática e preferência
+  de alto contraste.
+- **Offline-first:** persistência local com `sqflite` e fila de sincronização para integração
+  futura.
 
 ## Stack
 
@@ -78,13 +87,15 @@ docker-compose.yml
 
 ## Imagens do Projeto
 
-Os ícones abaixo fazem parte do pacote web do aplicativo e representam a identidade visual usada no projeto.
+Os ícones abaixo fazem parte do pacote web do aplicativo e representam a identidade visual usada no
+projeto.
 
-| Ícone principal | Ícone PWA | Ícone maskable |
-| --- | --- | --- |
+| Ícone principal                                                                | Ícone PWA                                                                | Ícone maskable                                                                         |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | <img src="web/icons/Icon-512.png" alt="Ícone principal do VCOS" width="160" /> | <img src="web/icons/Icon-192.png" alt="Ícone PWA do VCOS" width="160" /> | <img src="web/icons/Icon-maskable-512.png" alt="Ícone maskable do VCOS" width="160" /> |
 
-> Para screenshots de telas, salve as imagens em `docs/images/` e referencie-as neste README usando caminhos relativos, por exemplo: `docs/images/home.png`.
+> Para screenshots de telas, salve as imagens em `docs/images/` e referencie-as neste README usando
+> caminhos relativos, por exemplo: `docs/images/home.png`.
 
 ## Requisitos
 
@@ -146,7 +157,8 @@ Para configuração local ou produção, copie o exemplo de variáveis:
 copy backend\.env.example backend\.env
 ```
 
-Na VPS, o fluxo recomendado é clonar o repositório, ajustar `backend/.env` e subir com `docker compose up -d --build`. Depois coloque Caddy ou Nginx na frente para domínio e HTTPS.
+Na VPS, o fluxo recomendado é clonar o repositório, ajustar `backend/.env` e subir com
+`docker compose up -d --build`. Depois coloque Caddy ou Nginx na frente para domínio e HTTPS.
 
 ## Fluxo de Desenvolvimento
 
@@ -158,7 +170,8 @@ git pull
 git checkout -b feature/nome-da-funcionalidade
 ```
 
-Mantenha commits pequenos, objetivos e relacionados a uma única mudança. Antes de abrir um pull request, rode:
+Mantenha commits pequenos, objetivos e relacionados a uma única mudança. Antes de abrir um pull
+request, rode:
 
 ```bash
 dart format --set-exit-if-changed lib test integration_test
@@ -168,7 +181,8 @@ flutter test
 
 ## CI/CD
 
-O projeto possui um workflow em `.github/workflows/ci-cd.yml` para garantir qualidade e padronização antes de fazer merge ou publicar uma versão.
+O projeto possui um workflow em `.github/workflows/ci-cd.yml` para garantir qualidade e padronização
+antes de fazer merge ou publicar uma versão.
 
 - Valida nomes de branches.
 - Valida mensagens de commit.
@@ -182,7 +196,8 @@ As regras completas estão em `CONTRIBUTING.md`.
 
 ## Padrão de Branches e Commits
 
-Use os prefixos abaixo para organizar branches e commits. O nome deve ser curto, em minúsculo e separado por hífen.
+Use os prefixos abaixo para organizar branches e commits. O nome deve ser curto, em minúsculo e
+separado por hífen.
 
 ### Features
 
@@ -257,7 +272,8 @@ git tag
 
 ## Releases do GitHub
 
-Cada release deve ser criada a partir de uma tag publicada. Use a área **Releases** do GitHub para documentar o que mudou e anexar artefatos quando existirem builds distribuíveis.
+Cada release deve ser criada a partir de uma tag publicada. Use a área **Releases** do GitHub para
+documentar o que mudou e anexar artefatos quando existirem builds distribuíveis.
 
 Modelo recomendado de release:
 
@@ -265,14 +281,17 @@ Modelo recomendado de release:
 ## v0.1.0
 
 ### Novidades
+
 - Cadastro local de vendas
 - Cadastro local de gastos
 - Dashboard financeiro inicial
 
 ### Correções
+
 - Ajustes de validação nos formulários
 
 ### Observações
+
 - Sincronização com API ainda pendente
 ```
 

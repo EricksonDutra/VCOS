@@ -59,7 +59,8 @@ GET    /api/v1/settings
 PUT    /api/v1/settings
 ```
 
-Por padrao, o ambiente local usa SQLite em `backend/vcos.db`. Na VPS, troque `DATABASE_URL` no `backend/.env` para o banco de producao.
+Por padrao, o ambiente local usa SQLite em `backend/vcos.db`. Na VPS, troque `DATABASE_URL` no
+`backend/.env` para o banco de producao.
 
 ## Deploy inicial em VPS
 

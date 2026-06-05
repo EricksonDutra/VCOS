@@ -3,8 +3,8 @@ import 'package:sqflite/sqflite.dart';
 import '../models/app_settings.dart';
 import '../models/expense.dart';
 import '../models/sale.dart';
-import 'sync_status.dart';
 import 'local_database.dart';
+import 'sync_status.dart';
 import 'vcos_repository.dart';
 
 class SqfliteVcosRepository implements VcosRepository {

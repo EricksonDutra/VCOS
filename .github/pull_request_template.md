@@ -1,6 +1,6 @@
 ## Resumo
 
-- 
+-
 
 ## Checklist
 
@@ -12,4 +12,4 @@
 
 ## Evidencias
 
-- 
+-

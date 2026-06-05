@@ -1,0 +1,25 @@
+.dart_tool/
+.fvm/
+.git/
+.idea/
+.npm-cache/
+build/
+coverage/
+backend/.mypy_cache/
+backend/.pytest_cache/
+backend/.ruff_cache/
+backend/.venv/
+backend/htmlcov/
+pubspec.lock
+*.iml
+
+# Dart is formatted by dart format.
+lib/
+test/
+integration_test/
+
+# Generated or binary assets.
+android/
+web/icons/
+*.png
+*.db

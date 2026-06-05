@@ -1,14 +1,14 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
-from sqlalchemy import DateTime, Float, JSON, String
+from sqlalchemy import JSON, DateTime, Float, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.session import Base
 
 
 def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Expense(Base):

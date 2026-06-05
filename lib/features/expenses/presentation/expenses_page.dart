@@ -7,9 +7,9 @@ import '../../../core/models/expense.dart';
 import '../../../core/state/vcos_controller.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-import 'expense_detail_page.dart';
 import '../../shared/presentation/record_forms.dart';
 import '../../shared/presentation/sync_status_icon.dart';
+import 'expense_detail_page.dart';
 
 class ExpensesPage extends StatelessWidget {
   const ExpensesPage({super.key});
