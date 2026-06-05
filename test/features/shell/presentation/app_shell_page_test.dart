@@ -60,6 +60,21 @@ void main() {
     }
   });
 
+  testWidgets('opens the reports screen from the reports primary action', (
+    tester,
+  ) async {
+    await pumpApp(tester);
+
+    await tester.tap(bottomNavIcon(Icons.bar_chart_rounded));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Abrir relat\u00f3rios').first);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BackButton), findsOneWidget);
+    expect(find.text('Relat\u00f3rios'), findsWidgets);
+    expect(find.textContaining('Relat\u00f3rio de'), findsWidgets);
+  });
+
   testWidgets('registers sales and expenses offline through the app', (
     tester,
   ) async {
@@ -180,10 +195,20 @@ void main() {
       find.widgetWithText(TextField, 'Nome do ateli\u00ea'),
       'VCOS Casa',
     );
+    await tester.ensureVisible(find.byType(Slider));
+    await tester.drag(find.byType(Slider), const Offset(260, 0));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Reduzir anima\u00e7\u00f5es'));
+    await tester.tap(find.text('Reduzir anima\u00e7\u00f5es'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Bot\u00f5es maiores'));
+    await tester.tap(find.text('Bot\u00f5es maiores'));
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Salvar configura\u00e7\u00f5es'));
     await tester.tap(find.text('Salvar configura\u00e7\u00f5es'));
     await tester.pumpAndSettle();
 
     expect(find.text('VCOS Casa'), findsOneWidget);
+    expect(find.textContaining('grande'), findsWidgets);
   });
 }

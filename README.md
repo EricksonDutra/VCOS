@@ -233,12 +233,12 @@ refactor/repositorios
 docs/readme-inicial
 ```
 
-Exemplos de commits seguindo o mesmo padrão:
+Exemplos de commits aceitos pelo CI:
 
 ```bash
 git commit -m "feature/dashboard: adiciona cards de resumo"
-git commit -m "fix/correcao-validacao: ajusta validacao de valores"
-git commit -m "docs/readme-inicial: documenta fluxo de releases"
+git commit -m "fix(custos): ajusta validacao de valores"
+git commit -m "Improve reports accessibility"
 ```
 
 ## Tags do GitHub

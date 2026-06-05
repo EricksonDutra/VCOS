@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../../../core/state/vcos_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/month_filter_button.dart';
 import '../../../core/widgets/vcos_logo.dart';
+import '../../reports/presentation/reports_screen.dart';
 import '../../shared/presentation/record_forms.dart';
 import '../models/app_tabs.dart';
 
@@ -37,6 +39,7 @@ class _AppShellPageState extends State<AppShellPage> {
   @override
   Widget build(BuildContext context) {
     final selectedTab = appTabs[_selectedIndex];
+    final showMonthFilter = _selectedIndex != 4;
     final controller = context.watch<VcosController>();
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     final tabTransitionDuration =
@@ -73,6 +76,12 @@ class _AppShellPageState extends State<AppShellPage> {
                 ),
               ],
             ),
+            actions: showMonthFilter
+                ? const [
+                    MonthFilterButton(),
+                    SizedBox(width: 8),
+                  ]
+                : null,
           ),
           body: DecoratedBox(
             decoration: const BoxDecoration(
@@ -154,6 +163,13 @@ class _AppShellPageState extends State<AppShellPage> {
         return;
       case 2:
         showExpenseDialog(context);
+        return;
+      case 3:
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ReportsScreen(),
+          ),
+        );
         return;
       case 4:
         ScaffoldMessenger.of(context).showSnackBar(

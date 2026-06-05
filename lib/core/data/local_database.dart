@@ -16,7 +16,7 @@ class LocalDatabase {
 
     return _database = await openDatabase(
       dbPath,
-      version: 3,
+      version: 4,
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE sales (
@@ -57,6 +57,9 @@ class LocalDatabase {
             phone TEXT NOT NULL,
             auto_sync_enabled INTEGER NOT NULL,
             high_contrast_enabled INTEGER NOT NULL,
+            font_scale REAL NOT NULL DEFAULT 1.0,
+            reduce_motion_enabled INTEGER NOT NULL DEFAULT 0,
+            large_touch_targets_enabled INTEGER NOT NULL DEFAULT 1,
             updated_at TEXT NOT NULL
           )
         ''');
@@ -89,8 +92,14 @@ class LocalDatabase {
         if (oldVersion < 3) {
           await _ensureExpensePhotoPathsColumn(database);
         }
+        if (oldVersion < 4) {
+          await _ensureAppSettingsAccessibilityColumns(database);
+        }
       },
-      onOpen: _ensureExpensePhotoPathsColumn,
+      onOpen: (database) async {
+        await _ensureExpensePhotoPathsColumn(database);
+        await _ensureAppSettingsAccessibilityColumns(database);
+      },
     );
   }
 
@@ -121,5 +130,29 @@ class LocalDatabase {
       'CREATE INDEX IF NOT EXISTS idx_suggestions_field '
       'ON field_suggestions(field, usage_count, updated_at)',
     );
+  }
+
+  Future<void> _ensureAppSettingsAccessibilityColumns(Database database) async {
+    final columns = await database.rawQuery('PRAGMA table_info(app_settings)');
+    final columnNames = columns.map((column) => column['name']).toSet();
+
+    if (!columnNames.contains('font_scale')) {
+      await database.execute(
+        'ALTER TABLE app_settings '
+        'ADD COLUMN font_scale REAL NOT NULL DEFAULT 1.0',
+      );
+    }
+    if (!columnNames.contains('reduce_motion_enabled')) {
+      await database.execute(
+        'ALTER TABLE app_settings '
+        'ADD COLUMN reduce_motion_enabled INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+    if (!columnNames.contains('large_touch_targets_enabled')) {
+      await database.execute(
+        'ALTER TABLE app_settings '
+        'ADD COLUMN large_touch_targets_enabled INTEGER NOT NULL DEFAULT 1',
+      );
+    }
   }
 }

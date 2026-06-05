@@ -1,15 +1,19 @@
 $ErrorActionPreference = 'Stop'
 
-$branchPattern = '^(feature|fix|hotfix|refactor|docs)\/[a-z0-9]+(-[a-z0-9]+)*$'
-$commitPattern = '^(feature|fix|hotfix|refactor|docs)\/[a-z0-9]+(-[a-z0-9]+)*: .+$'
+$branchSegment = '[a-z0-9]+(-[a-z0-9]+)*'
+$branchPattern = "^(feature|fix|hotfix|refactor|docs)\/$branchSegment(\/$branchSegment)*$"
+$legacyCommitPattern = "^(feature|fix|hotfix|refactor|docs)\/$branchSegment(\/$branchSegment)*: .{3,}$"
+$conventionalCommitPattern = '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|hotfix)(\([a-z0-9]+(-[a-z0-9]+)*\))?: .{3,}$'
+$descriptiveCommitPattern = '^[\p{L}\p{N}][\p{L}\p{N}\s.,:;!?()\[\]\/+"-]{9,119}$'
+$blockedCommitPattern = '^(wip|tmp|temp|teste?|test|asdf|alteracoes?|ajustes?)$'
 $tagPattern = '^v[0-9]+\.[0-9]+\.[0-9]+$'
 $defaultBase = if ($env:GITHUB_BASE_REF) { $env:GITHUB_BASE_REF } else { 'main' }
 $currentRef = if ($env:GITHUB_HEAD_REF) { $env:GITHUB_HEAD_REF } else { $env:GITHUB_REF_NAME }
 
 function Write-Policy {
   Write-Host 'Padrao esperado:'
-  Write-Host '- Branches: feature/login, fix/correcao-api, hotfix/crash-android, refactor/camada-dados, docs/readme-inicial'
-  Write-Host '- Commits:  feature/login: adiciona tela de login'
+  Write-Host '- Branches: feature/minha-tarefa, fix/correcao-api, hotfix/crash-android, refactor/camada-dados, docs/readme-inicial'
+  Write-Host '- Commits:  feature/minha-tarefa: adiciona tela, feat(tela): adiciona tela, ou titulo descritivo objetivo'
   Write-Host '- Tags:     v0.1.0, v1.2.3'
 }
 
@@ -67,7 +71,7 @@ function Assert-CommitPolicy {
       continue
     }
 
-    if ($subject -notmatch $commitPattern) {
+    if (-not (Test-CommitSubject -Subject $subject)) {
       Write-Host "Commit fora do padrao: $subject"
       $invalid = $true
     }
@@ -79,6 +83,25 @@ function Assert-CommitPolicy {
   }
 
   Write-Host 'Mensagens de commit validas.'
+}
+
+function Test-CommitSubject {
+  param([string] $Subject)
+
+  $normalized = $Subject.Trim()
+  if ([string]::IsNullOrWhiteSpace($normalized)) {
+    return $false
+  }
+
+  if ($normalized -match $blockedCommitPattern) {
+    return $false
+  }
+
+  return (
+    $normalized -match $legacyCommitPattern -or
+    $normalized -match $conventionalCommitPattern -or
+    $normalized -match $descriptiveCommitPattern
+  )
 }
 
 function Test-GitRevision {

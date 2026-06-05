@@ -5,6 +5,9 @@ class AppSettings {
     required this.phone,
     required this.autoSyncEnabled,
     required this.highContrastEnabled,
+    this.fontScale = 1.0,
+    this.reduceMotionEnabled = false,
+    this.largeTouchTargetsEnabled = true,
     required this.updatedAt,
   });
 
@@ -15,6 +18,9 @@ class AppSettings {
       phone: '',
       autoSyncEnabled: true,
       highContrastEnabled: false,
+      fontScale: 1.0,
+      reduceMotionEnabled: false,
+      largeTouchTargetsEnabled: true,
       updatedAt: DateTime.now(),
     );
   }
@@ -24,6 +30,9 @@ class AppSettings {
   final String phone;
   final bool autoSyncEnabled;
   final bool highContrastEnabled;
+  final double fontScale;
+  final bool reduceMotionEnabled;
+  final bool largeTouchTargetsEnabled;
   final DateTime updatedAt;
 
   AppSettings copyWith({
@@ -32,6 +41,9 @@ class AppSettings {
     String? phone,
     bool? autoSyncEnabled,
     bool? highContrastEnabled,
+    double? fontScale,
+    bool? reduceMotionEnabled,
+    bool? largeTouchTargetsEnabled,
     DateTime? updatedAt,
   }) {
     return AppSettings(
@@ -40,6 +52,10 @@ class AppSettings {
       phone: phone ?? this.phone,
       autoSyncEnabled: autoSyncEnabled ?? this.autoSyncEnabled,
       highContrastEnabled: highContrastEnabled ?? this.highContrastEnabled,
+      fontScale: fontScale ?? this.fontScale,
+      reduceMotionEnabled: reduceMotionEnabled ?? this.reduceMotionEnabled,
+      largeTouchTargetsEnabled:
+          largeTouchTargetsEnabled ?? this.largeTouchTargetsEnabled,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
@@ -52,6 +68,9 @@ class AppSettings {
       'phone': phone,
       'auto_sync_enabled': autoSyncEnabled ? 1 : 0,
       'high_contrast_enabled': highContrastEnabled ? 1 : 0,
+      'font_scale': fontScale,
+      'reduce_motion_enabled': reduceMotionEnabled ? 1 : 0,
+      'large_touch_targets_enabled': largeTouchTargetsEnabled ? 1 : 0,
       'updated_at': updatedAt.toIso8601String(),
     };
   }
@@ -63,6 +82,12 @@ class AppSettings {
       phone: map['phone'] as String? ?? '',
       autoSyncEnabled: _boolFromMap(map['auto_sync_enabled'], fallback: true),
       highContrastEnabled: _boolFromMap(map['high_contrast_enabled']),
+      fontScale: _doubleFromMap(map['font_scale'], fallback: 1.0),
+      reduceMotionEnabled: _boolFromMap(map['reduce_motion_enabled']),
+      largeTouchTargetsEnabled: _boolFromMap(
+        map['large_touch_targets_enabled'],
+        fallback: true,
+      ),
       updatedAt: DateTime.parse(map['updated_at'] as String),
     );
   }
@@ -70,6 +95,11 @@ class AppSettings {
   static bool _boolFromMap(Object? value, {bool fallback = false}) {
     if (value is bool) return value;
     if (value is int) return value == 1;
+    return fallback;
+  }
+
+  static double _doubleFromMap(Object? value, {required double fallback}) {
+    if (value is num) return value.toDouble();
     return fallback;
   }
 }
