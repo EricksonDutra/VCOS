@@ -256,6 +256,9 @@ class ApiClient {
       'phone': settings.phone,
       'auto_sync_enabled': settings.autoSyncEnabled,
       'high_contrast_enabled': settings.highContrastEnabled,
+      'font_scale': settings.fontScale,
+      'reduce_motion_enabled': settings.reduceMotionEnabled,
+      'large_touch_targets_enabled': settings.largeTouchTargetsEnabled,
     };
   }
 

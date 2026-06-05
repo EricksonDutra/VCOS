@@ -74,8 +74,8 @@ void main() {
       final selectedIcon = navTheme.iconTheme?.resolve({WidgetState.selected});
       final unselectedIcon = navTheme.iconTheme?.resolve({});
 
-      expect(selectedStyle?.fontSize, greaterThanOrEqualTo(19));
-      expect(unselectedStyle?.fontSize, greaterThanOrEqualTo(19));
+      expect(selectedStyle?.fontSize, greaterThanOrEqualTo(18));
+      expect(unselectedStyle?.fontSize, greaterThanOrEqualTo(18));
       expect(selectedIcon?.size, greaterThanOrEqualTo(36));
       expect(unselectedIcon?.size, greaterThanOrEqualTo(34));
     });

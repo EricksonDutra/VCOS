@@ -43,11 +43,31 @@ class VcosApp extends StatelessWidget {
           syncGateway: appSyncGateway,
         )..load();
       },
-      child: MaterialApp(
-        title: 'VCOS',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.create(useGoogleFonts: useGoogleFonts),
-        home: AppShellPage(showSplash: showSplash),
+      child: Consumer<VcosController>(
+        builder: (context, controller, _) {
+          final settings = controller.settings;
+          return MaterialApp(
+            title: 'VCOS',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.create(
+              useGoogleFonts: useGoogleFonts,
+              highContrast: settings.highContrastEnabled,
+              largeTouchTargets: settings.largeTouchTargetsEnabled,
+            ),
+            builder: (context, child) {
+              final mediaQuery = MediaQuery.of(context);
+              return MediaQuery(
+                data: mediaQuery.copyWith(
+                  disableAnimations:
+                      mediaQuery.disableAnimations || settings.reduceMotionEnabled,
+                  textScaler: TextScaler.linear(settings.fontScale),
+                ),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+            home: AppShellPage(showSplash: showSplash),
+          );
+        },
       ),
     );
   }

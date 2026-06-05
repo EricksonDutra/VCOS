@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../data/date_formatting.dart';
 import '../data/sync_status.dart';
 import '../data/vcos_repository.dart';
 import '../models/app_settings.dart';
@@ -27,13 +28,30 @@ class VcosController extends ChangeNotifier {
   var _pendingSyncCount = 0;
   var _isLoading = true;
   var _isSyncing = false;
+  var _selectedMonth = monthOnly(DateTime.now());
   String? _message;
 
   List<Sale> get sales => List.unmodifiable(_sales);
   List<Expense> get expenses => List.unmodifiable(_expenses);
+  List<Sale> get visibleSales {
+    return _sales
+        .where((sale) => !sale.isDeleted && isSameMonth(sale.createdAt, _selectedMonth))
+        .toList(growable: false);
+  }
+
+  List<Expense> get visibleExpenses {
+    return _expenses
+        .where(
+          (expense) =>
+              !expense.isDeleted && isSameMonth(expense.createdAt, _selectedMonth),
+        )
+        .toList(growable: false);
+  }
+
   AppSettings get settings => _settings;
   bool get isLoading => _isLoading;
   bool get isSyncing => _isSyncing;
+  DateTime get selectedMonth => _selectedMonth;
   String? get message => _message;
   List<String> suggestionsFor(String field) {
     return List.unmodifiable(_suggestions[field] ?? const []);
@@ -41,10 +59,20 @@ class VcosController extends ChangeNotifier {
 
   DashboardSummary get summary {
     return DashboardSummary.fromRecords(
-      sales: _sales,
-      expenses: _expenses,
+      sales: visibleSales,
+      expenses: visibleExpenses,
       pendingSyncCount: _pendingSyncCount,
     );
+  }
+
+  void setSelectedMonth(DateTime month) {
+    _selectedMonth = monthOnly(month);
+    notifyListeners();
+  }
+
+  void moveSelectedMonth(int amount) {
+    _selectedMonth = addMonths(_selectedMonth, amount);
+    notifyListeners();
   }
 
   Future<void> load() async {

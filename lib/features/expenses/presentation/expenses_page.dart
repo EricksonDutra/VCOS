@@ -18,8 +18,7 @@ class ExpensesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<VcosController>(
       builder: (context, controller, _) {
-        final expenses =
-            controller.expenses.where((expense) => !expense.isDeleted).toList();
+        final expenses = controller.visibleExpenses;
 
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 110),

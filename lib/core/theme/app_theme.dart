@@ -6,7 +6,11 @@ import 'app_colors.dart';
 abstract final class AppTheme {
   static ThemeData get light => create();
 
-  static ThemeData create({bool useGoogleFonts = true}) {
+  static ThemeData create({
+    bool useGoogleFonts = true,
+    bool highContrast = false,
+    bool largeTouchTargets = true,
+  }) {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.cherryPink,
       primary: AppColors.cherryPink,
@@ -125,7 +129,7 @@ abstract final class AppTheme {
           final selected = states.contains(WidgetState.selected);
           return _bodyStyle(useGoogleFonts).copyWith(
             color: selected ? AppColors.cherryPink : AppColors.threadBrown,
-            fontSize: 19,
+            fontSize: 18,
             height: 1.16,
             fontWeight: selected ? FontWeight.w900 : FontWeight.w800,
           );
@@ -133,7 +137,7 @@ abstract final class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(64),
+          minimumSize: Size.fromHeight(largeTouchTargets ? 72 : 60),
           backgroundColor: AppColors.cherryPink,
           foregroundColor: AppColors.white,
           textStyle: _bodyStyle(useGoogleFonts).copyWith(
@@ -149,7 +153,7 @@ abstract final class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          minimumSize: const Size.fromHeight(64),
+          minimumSize: Size.fromHeight(largeTouchTargets ? 72 : 60),
           foregroundColor: AppColors.threadBrown,
           side: const BorderSide(color: AppColors.cherryPink, width: 3),
           textStyle: _bodyStyle(useGoogleFonts).copyWith(
@@ -182,15 +186,24 @@ abstract final class AppTheme {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: AppColors.tealGreen, width: 3),
+          borderSide: BorderSide(
+            color: AppColors.tealGreen,
+            width: highContrast ? 4 : 3,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: AppColors.tealGreen, width: 3),
+          borderSide: BorderSide(
+            color: highContrast ? AppColors.threadBrown : AppColors.tealGreen,
+            width: highContrast ? 4 : 3,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: AppColors.grapePurple, width: 4),
+          borderSide: BorderSide(
+            color: AppColors.grapePurple,
+            width: highContrast ? 5 : 4,
+          ),
         ),
       ),
       cardTheme: CardThemeData(
@@ -201,7 +214,7 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(22),
           side: BorderSide(
             color: AppColors.threadBrown.withValues(alpha: 0.38),
-            width: 2.5,
+            width: highContrast ? 3.5 : 2.5,
           ),
         ),
       ),
