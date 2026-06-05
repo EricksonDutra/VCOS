@@ -35,7 +35,10 @@ class VcosController extends ChangeNotifier {
   List<Expense> get expenses => List.unmodifiable(_expenses);
   List<Sale> get visibleSales {
     return _sales
-        .where((sale) => !sale.isDeleted && isSameMonth(sale.createdAt, _selectedMonth))
+        .where(
+          (sale) =>
+              !sale.isDeleted && isSameMonth(sale.createdAt, _selectedMonth),
+        )
         .toList(growable: false);
   }
 
@@ -43,7 +46,8 @@ class VcosController extends ChangeNotifier {
     return _expenses
         .where(
           (expense) =>
-              !expense.isDeleted && isSameMonth(expense.createdAt, _selectedMonth),
+              !expense.isDeleted &&
+              isSameMonth(expense.createdAt, _selectedMonth),
         )
         .toList(growable: false);
   }
@@ -230,7 +234,10 @@ class VcosController extends ChangeNotifier {
     );
 
     await _repository.saveExpense(updatedExpense);
-    await rememberSuggestion('expense_description', updatedExpense.description);
+    await rememberSuggestion(
+      'expense_description',
+      updatedExpense.description,
+    );
     await rememberSuggestion('expense_category', updatedExpense.category);
     await _repository.enqueueSync(
       entityType: 'expense',
@@ -289,8 +296,9 @@ class VcosController extends ChangeNotifier {
       entityId: '1',
     );
     final result = await _syncGateway.pushChanges(
-      sales:
-          _sales.where((sale) => sale.syncStatus != SyncStatus.synced).toList(),
+      sales: _sales
+          .where((sale) => sale.syncStatus != SyncStatus.synced)
+          .toList(),
       expenses: _expenses
           .where((expense) => expense.syncStatus != SyncStatus.synced)
           .toList(),

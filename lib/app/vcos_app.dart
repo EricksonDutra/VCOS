@@ -58,8 +58,8 @@ class VcosApp extends StatelessWidget {
               final mediaQuery = MediaQuery.of(context);
               return MediaQuery(
                 data: mediaQuery.copyWith(
-                  disableAnimations:
-                      mediaQuery.disableAnimations || settings.reduceMotionEnabled,
+                  disableAnimations: mediaQuery.disableAnimations ||
+                      settings.reduceMotionEnabled,
                   textScaler: TextScaler.linear(settings.fontScale),
                 ),
                 child: child ?? const SizedBox.shrink(),

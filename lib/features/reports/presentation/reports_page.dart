@@ -386,7 +386,10 @@ class _ReportRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
             Text(value, style: Theme.of(context).textTheme.headlineMedium),
           ],
