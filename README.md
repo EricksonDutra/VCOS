@@ -174,7 +174,7 @@ Mantenha commits pequenos, objetivos e relacionados a uma única mudança. Antes
 request, rode:
 
 ```bash
-dart format --set-exit-if-changed lib test integration_test
+powershell -NoProfile -ExecutionPolicy Bypass -File .github/scripts/dart_format_check.ps1
 flutter analyze
 flutter test
 ```
@@ -186,7 +186,7 @@ antes de fazer merge ou publicar uma versão.
 
 - Valida nomes de branches.
 - Valida mensagens de commit.
-- Executa `dart format --set-exit-if-changed lib test integration_test`.
+- Executa `.github/scripts/dart_format_check.ps1`.
 - Executa `flutter analyze`.
 - Executa `flutter test --coverage`.
 - Publica o arquivo `coverage/lcov.info` como artefato.
@@ -306,7 +306,7 @@ Boas práticas:
 
 Antes de fazer merge, valide:
 
-- `dart format --set-exit-if-changed lib test integration_test`
+- `powershell -NoProfile -ExecutionPolicy Bypass -File .github/scripts/dart_format_check.ps1`
 - `flutter analyze`
 - `flutter test`
 - Navegação principal do app

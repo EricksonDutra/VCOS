@@ -62,7 +62,8 @@ jobs:
         run: flutter pub get
 
       - name: Verificar formatacao
-        run: dart format --set-exit-if-changed lib test integration_test
+        shell: pwsh
+        run: .github/scripts/dart_format_check.ps1
 
       - name: Analisar codigo
         run: flutter analyze
