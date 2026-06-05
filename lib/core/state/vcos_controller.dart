@@ -37,8 +37,7 @@ class VcosController extends ChangeNotifier {
     return _sales
         .where(
           (sale) =>
-              !sale.isDeleted &&
-              isSameMonth(sale.createdAt, _selectedMonth),
+              !sale.isDeleted && isSameMonth(sale.createdAt, _selectedMonth),
         )
         .toList(growable: false);
   }
@@ -297,9 +296,8 @@ class VcosController extends ChangeNotifier {
       entityId: '1',
     );
     final result = await _syncGateway.pushChanges(
-      sales: _sales
-          .where((sale) => sale.syncStatus != SyncStatus.synced)
-          .toList(),
+      sales:
+          _sales.where((sale) => sale.syncStatus != SyncStatus.synced).toList(),
       expenses: _expenses
           .where((expense) => expense.syncStatus != SyncStatus.synced)
           .toList(),
