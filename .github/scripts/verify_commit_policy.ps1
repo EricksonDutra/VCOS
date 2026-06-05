@@ -81,6 +81,13 @@ function Assert-CommitPolicy {
   Write-Host 'Mensagens de commit validas.'
 }
 
+function Test-GitRevision {
+  param([string] $Revision)
+
+  git rev-parse --verify --quiet "$Revision^{commit}" *> $null
+  return $LASTEXITCODE -eq 0
+}
+
 if ($env:GITHUB_REF_TYPE -eq 'tag') {
   Assert-TagPolicy -Tag $currentRef
   exit 0
@@ -95,7 +102,12 @@ if ($env:GITHUB_EVENT_NAME -eq 'pull_request') {
   }
   Assert-CommitPolicy -Range "origin/$defaultBase..HEAD"
 } elseif ($env:GITHUB_EVENT_BEFORE -and $env:GITHUB_EVENT_BEFORE -ne '0000000000000000000000000000000000000000') {
-  Assert-CommitPolicy -Range "$env:GITHUB_EVENT_BEFORE..HEAD"
+  if (Test-GitRevision -Revision $env:GITHUB_EVENT_BEFORE) {
+    Assert-CommitPolicy -Range "$env:GITHUB_EVENT_BEFORE..HEAD"
+  } else {
+    Write-Host "Commit base nao disponivel no checkout: $env:GITHUB_EVENT_BEFORE"
+    Assert-CommitPolicy -Range '-1'
+  }
 } else {
   Assert-CommitPolicy -Range '-1'
 }

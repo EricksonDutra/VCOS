@@ -59,7 +59,7 @@ class VcosController extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
 
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> addSale({
@@ -92,7 +92,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Venda salva offline. Sincronizacao fica pendente.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> updateSale({
@@ -124,7 +124,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Venda atualizada offline.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> deleteSale(Sale sale) async {
@@ -143,7 +143,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Venda excluida offline.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> addExpense({
@@ -178,7 +178,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Gasto salvo offline. Sincronizacao fica pendente.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> updateExpense({
@@ -212,7 +212,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Gasto atualizado offline.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> deleteExpense(Expense expense) async {
@@ -231,7 +231,7 @@ class VcosController extends ChangeNotifier {
     await _refreshRecords();
     _message = 'Gasto excluido offline.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> updateSettings(AppSettings settings) async {
@@ -245,7 +245,7 @@ class VcosController extends ChangeNotifier {
     _pendingSyncCount = await _repository.loadPendingSyncCount();
     _message = 'Configuracoes salvas no aparelho.';
     notifyListeners();
-    unawaited(runAutoSync());
+    unawaited(_syncWithRemote());
   }
 
   Future<void> runAutoSync() async {
@@ -291,6 +291,42 @@ class VcosController extends ChangeNotifier {
     }
     await _refreshRecords();
     _message = result.message;
+    _isSyncing = false;
+    notifyListeners();
+
+    if (result.success) {
+      unawaited(_pullRemoteSnapshot());
+    }
+  }
+
+  Future<void> _syncWithRemote() async {
+    if (!_settings.autoSyncEnabled || _isSyncing) return;
+    if (_pendingSyncCount > 0) {
+      await runAutoSync();
+      return;
+    }
+
+    await _pullRemoteSnapshot();
+  }
+
+  Future<void> _pullRemoteSnapshot() async {
+    if (!_settings.autoSyncEnabled || _isSyncing) return;
+
+    _isSyncing = true;
+    notifyListeners();
+
+    final snapshot = await _syncGateway.pullRemoteSnapshot();
+    if (snapshot != null) {
+      await _repository.replaceRemoteSnapshot(
+        sales: snapshot.sales,
+        expenses: snapshot.expenses,
+        settings: snapshot.settings,
+      );
+      await _refreshRecords();
+      _settings = await _repository.loadSettings();
+      _message = 'Dados atualizados com a API.';
+    }
+
     _isSyncing = false;
     notifyListeners();
   }

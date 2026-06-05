@@ -20,6 +20,11 @@ abstract class VcosRepository {
     required String field,
     required String value,
   });
+  Future<void> replaceRemoteSnapshot({
+    required List<Sale> sales,
+    required List<Expense> expenses,
+    required AppSettings settings,
+  });
   Future<void> enqueueSync({
     required String entityType,
     required String entityId,

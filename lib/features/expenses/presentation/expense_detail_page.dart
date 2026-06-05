@@ -232,15 +232,7 @@ class _PhotoGrid extends StatelessWidget {
           onTap: () => _showPhoto(context, path),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(path),
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: AppColors.linen,
-                alignment: Alignment.center,
-                child: const Icon(Icons.broken_image_rounded, size: 40),
-              ),
-            ),
+            child: _ExpensePhoto(path: path, fit: BoxFit.cover),
           ),
         );
       },
@@ -258,13 +250,9 @@ class _PhotoGrid extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  child: Image.file(
-                    File(path),
+                  child: _ExpensePhoto(
+                    path: path,
                     fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Icon(Icons.broken_image_rounded, size: 56),
-                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
@@ -280,6 +268,53 @@ class _PhotoGrid extends StatelessWidget {
       },
     );
   }
+}
+
+class _ExpensePhoto extends StatelessWidget {
+  const _ExpensePhoto({
+    required this.path,
+    required this.fit,
+  });
+
+  final String path;
+  final BoxFit fit;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isRemotePhoto(path)) {
+      return Image.network(
+        path,
+        fit: fit,
+        errorBuilder: (_, __, ___) => const _BrokenPhoto(),
+      );
+    }
+
+    return Image.file(
+      File(path),
+      fit: fit,
+      errorBuilder: (_, __, ___) => const _BrokenPhoto(),
+    );
+  }
+}
+
+class _BrokenPhoto extends StatelessWidget {
+  const _BrokenPhoto();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.linen,
+      alignment: Alignment.center,
+      child: const Padding(
+        padding: EdgeInsets.all(24),
+        child: Icon(Icons.broken_image_rounded, size: 56),
+      ),
+    );
+  }
+}
+
+bool _isRemotePhoto(String path) {
+  return path.startsWith('http://') || path.startsWith('https://');
 }
 
 Future<void> _confirmDeleteExpense(

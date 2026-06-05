@@ -73,6 +73,23 @@ class MemoryVcosRepository implements VcosRepository {
   }
 
   @override
+  Future<void> replaceRemoteSnapshot({
+    required List<Sale> sales,
+    required List<Expense> expenses,
+    required AppSettings settings,
+  }) async {
+    _sales
+      ..clear()
+      ..addAll(sales);
+    _expenses
+      ..clear()
+      ..addAll(expenses);
+    _settings = settings;
+    _pendingSyncKeys.clear();
+    _pendingSyncCount = 0;
+  }
+
+  @override
   Future<void> enqueueSync({
     required String entityType,
     required String entityId,

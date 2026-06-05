@@ -17,7 +17,7 @@ class Base(DeclarativeBase):
 
 
 def create_db_and_tables() -> None:
-    from app.models import expense, sale  # noqa: F401
+    from app.models import expense, sale, settings  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
 
