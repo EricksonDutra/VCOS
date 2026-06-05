@@ -61,9 +61,15 @@ class AppSettings {
       studioName: map['studio_name'] as String? ?? 'VCOS Retalhos',
       ownerName: map['owner_name'] as String? ?? '',
       phone: map['phone'] as String? ?? '',
-      autoSyncEnabled: (map['auto_sync_enabled'] as int? ?? 1) == 1,
-      highContrastEnabled: (map['high_contrast_enabled'] as int? ?? 0) == 1,
+      autoSyncEnabled: _boolFromMap(map['auto_sync_enabled'], fallback: true),
+      highContrastEnabled: _boolFromMap(map['high_contrast_enabled']),
       updatedAt: DateTime.parse(map['updated_at'] as String),
     );
+  }
+
+  static bool _boolFromMap(Object? value, {bool fallback = false}) {
+    if (value is bool) return value;
+    if (value is int) return value == 1;
+    return fallback;
   }
 }

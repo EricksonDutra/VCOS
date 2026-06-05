@@ -165,6 +165,40 @@ class SqfliteVcosRepository implements VcosRepository {
   }
 
   @override
+  Future<void> replaceRemoteSnapshot({
+    required List<Sale> sales,
+    required List<Expense> expenses,
+    required AppSettings settings,
+  }) async {
+    final database = await _database;
+    await database.transaction((transaction) async {
+      await transaction.delete('sync_queue');
+      await transaction.delete('sales');
+      await transaction.delete('expenses');
+
+      for (final sale in sales) {
+        await transaction.insert(
+          'sales',
+          sale.copyWith(syncStatus: SyncStatus.synced).toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+      for (final expense in expenses) {
+        await transaction.insert(
+          'expenses',
+          expense.copyWith(syncStatus: SyncStatus.synced).toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+      await transaction.insert(
+        'app_settings',
+        settings.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    });
+  }
+
+  @override
   Future<void> enqueueSync({
     required String entityType,
     required String entityId,

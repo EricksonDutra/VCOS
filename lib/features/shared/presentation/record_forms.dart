@@ -374,18 +374,10 @@ class _ExpensePhotoThumb extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(path),
+            child: _ExpensePhotoImage(
+              path: path,
               width: 104,
               height: 104,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                width: 104,
-                height: 104,
-                color: AppColors.linen,
-                alignment: Alignment.center,
-                child: const Icon(Icons.broken_image_rounded),
-              ),
             ),
           ),
           Positioned(
@@ -401,6 +393,70 @@ class _ExpensePhotoThumb extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ExpensePhotoImage extends StatelessWidget {
+  const _ExpensePhotoImage({
+    required this.path,
+    required this.width,
+    required this.height,
+  });
+
+  final String path;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isRemotePhoto(path)) {
+      return Image.network(
+        path,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _BrokenPhoto(
+          width: width,
+          height: height,
+        ),
+      );
+    }
+
+    return Image.file(
+      File(path),
+      width: width,
+      height: height,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => _BrokenPhoto(
+        width: width,
+        height: height,
+      ),
+    );
+  }
+}
+
+class _BrokenPhoto extends StatelessWidget {
+  const _BrokenPhoto({
+    required this.width,
+    required this.height,
+  });
+
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      color: AppColors.linen,
+      alignment: Alignment.center,
+      child: const Icon(Icons.broken_image_rounded),
+    );
+  }
+}
+
+bool _isRemotePhoto(String path) {
+  return path.startsWith('http://') || path.startsWith('https://');
 }
 
 class _RecordDialogFrame extends StatelessWidget {

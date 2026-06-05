@@ -3,6 +3,18 @@ import '../models/app_settings.dart';
 import '../models/expense.dart';
 import '../models/sale.dart';
 
+class RemoteSnapshot {
+  const RemoteSnapshot({
+    required this.sales,
+    required this.expenses,
+    required this.settings,
+  });
+
+  final List<Sale> sales;
+  final List<Expense> expenses;
+  final AppSettings settings;
+}
+
 class SyncResult {
   const SyncResult({
     required this.success,
@@ -25,6 +37,8 @@ abstract class SyncGateway {
     required List<Expense> expenses,
     AppSettings? settings,
   });
+
+  Future<RemoteSnapshot?> pullRemoteSnapshot();
 }
 
 class PendingApiSyncGateway implements SyncGateway {
@@ -41,6 +55,9 @@ class PendingApiSyncGateway implements SyncGateway {
       message: 'API ainda nao configurada. Dados mantidos localmente.',
     );
   }
+
+  @override
+  Future<RemoteSnapshot?> pullRemoteSnapshot() async => null;
 }
 
 class ApiSyncGateway implements SyncGateway {
@@ -108,6 +125,22 @@ class ApiSyncGateway implements SyncGateway {
         settingsSynced: settingsSynced,
         message: 'API indisponivel. Dados mantidos localmente.',
       );
+    }
+  }
+
+  @override
+  Future<RemoteSnapshot?> pullRemoteSnapshot() async {
+    try {
+      final sales = await _apiClient.listSales();
+      final expenses = await _apiClient.listExpenses();
+      final settings = await _apiClient.readSettings();
+      return RemoteSnapshot(
+        sales: sales,
+        expenses: expenses,
+        settings: settings,
+      );
+    } on Object {
+      return null;
     }
   }
 }
