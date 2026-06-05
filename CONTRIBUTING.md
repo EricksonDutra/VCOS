@@ -29,13 +29,15 @@ release/*
 
 ## Commits
 
-Use o mesmo prefixo da branch no inicio da mensagem:
+Use mensagens curtas e objetivas. O CI aceita tres formatos:
 
 ```bash
 git commit -m "feature/dashboard: adiciona cards de resumo"
-git commit -m "fix/correcao-validacao: ajusta campos obrigatorios"
-git commit -m "docs/readme-inicial: documenta padrao de releases"
+git commit -m "feat(dashboard): adiciona cards de resumo"
+git commit -m "Improve dashboard accessibility"
 ```
+
+Evite mensagens genericas como `wip`, `teste`, `ajustes` ou `alteracoes`.
 
 ## Qualidade local
 
