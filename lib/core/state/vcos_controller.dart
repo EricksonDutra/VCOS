@@ -37,7 +37,8 @@ class VcosController extends ChangeNotifier {
     return _sales
         .where(
           (sale) =>
-              !sale.isDeleted && isSameMonth(sale.createdAt, _selectedMonth),
+              !sale.isDeleted &&
+              isSameMonth(sale.createdAt, _selectedMonth),
         )
         .toList(growable: false);
   }
